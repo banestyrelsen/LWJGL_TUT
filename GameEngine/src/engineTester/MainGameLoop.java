@@ -6,16 +6,17 @@ import renderEngine.DisplayManager;
 import renderEngine.Loader;
 import renderEngine.RawModel;
 import renderEngine.Renderer;
+import shaders.StaticShader;
 
 public class MainGameLoop {
 
   public static void main(String[] args) {
     DisplayManager.createDisplay();
-
     Loader loader = new Loader();
     Renderer renderer = new Renderer();
+    StaticShader shader = new StaticShader();
 
-    // OpenGL expects vertices to be defined counter clockwise by default
+    // OpenGL expects vertices to be defined counterclockwise by default
     float[] vertices = { //
         -0.5f, 0.5f, 0f, // V0
         -0.5f, -0.5f, 0f, // V1
@@ -32,12 +33,15 @@ public class MainGameLoop {
 
     while (!Display.isCloseRequested()) {
       renderer.prepare();
+      shader.start();
       // game logic
       // render
       renderer.render(model);
+      shader.stop();
       DisplayManager.updateDisplay();
     }
 
+    shader.cleanUp();
     loader.cleanUp();
     DisplayManager.closeDisplay();
   }
