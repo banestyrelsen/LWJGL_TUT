@@ -24,10 +24,10 @@ public class OBJLoader {
     }
     BufferedReader reader = new BufferedReader(fr);
     String line;
-    List<Vector3f> vertices = new ArrayList<>();
-    List<Vector2f> textures = new ArrayList<>();
-    List<Vector3f> normals = new ArrayList<>();
-    List<Integer> indices = new ArrayList<>();
+    List<Vector3f> vertices = new ArrayList<Vector3f>();
+    List<Vector2f> textures = new ArrayList<Vector2f>();
+    List<Vector3f> normals = new ArrayList<Vector3f>();
+    List<Integer> indices = new ArrayList<Integer>();
     float[] verticesArray = null;
     float[] normalsArray = null;
     float[] textureArray = null;
@@ -36,18 +36,18 @@ public class OBJLoader {
       while (true) {
         line = reader.readLine();
         String[] currentLine = line.split(" ");
-        if (line.startsWith("v ")) { // vertex position
+        if (line.startsWith("v ")) {
           Vector3f vertex = new Vector3f(Float.parseFloat(currentLine[1]), Float.parseFloat(currentLine[2]),
               Float.parseFloat(currentLine[3]));
           vertices.add(vertex);
-        } else if (line.startsWith("vt ")) { // texture coordinate
+        } else if (line.startsWith("vt ")) {
           Vector2f texture = new Vector2f(Float.parseFloat(currentLine[1]), Float.parseFloat(currentLine[2]));
           textures.add(texture);
-        } else if (line.startsWith("vn ")) { // normal
+        } else if (line.startsWith("vn ")) {
           Vector3f normal = new Vector3f(Float.parseFloat(currentLine[1]), Float.parseFloat(currentLine[2]),
               Float.parseFloat(currentLine[3]));
           normals.add(normal);
-        } else if (line.startsWith("f ")) { // face
+        } else if (line.startsWith("f ")) {
           textureArray = new float[vertices.size() * 2];
           normalsArray = new float[vertices.size() * 3];
           break;
@@ -70,19 +70,19 @@ public class OBJLoader {
       }
       reader.close();
     } catch (Exception e) {
-      System.err.println("OBJLoader : Couldn't read line.");
+      System.err.println("OBJLoader : Erorr reading file \"" + "res/" + fileName + ".obj\"");
       e.printStackTrace();
     }
-    verticesArray = new float[vertices.size()*3];
+
+    verticesArray = new float[vertices.size() * 3];
     indicesArray = new int[indices.size()];
-    
+
     int vertexPointer = 0;
     for (Vector3f vertex : vertices) {
       verticesArray[vertexPointer++] = vertex.x;
       verticesArray[vertexPointer++] = vertex.y;
       verticesArray[vertexPointer++] = vertex.z;
     }
-    
     for (int i = 0; i < indices.size(); i++) {
       indicesArray[i] = indices.get(i);
     }
@@ -95,12 +95,10 @@ public class OBJLoader {
     indices.add(currentVertexPointer);
     Vector2f currentTex = textures.get(Integer.parseInt(vertexData[1]) - 1);
     textureArray[currentVertexPointer * 2] = currentTex.x;
-    textureArray[currentVertexPointer * 2 + 1] = 1 - currentTex.y; // offset by 1 because OpenGL starts from top left of
-                                                                   // texture whereas Blender starts from the bottom
-                                                                   // left
+    textureArray[currentVertexPointer * 2 + 1] = 1 - currentTex.y;
     Vector3f currentNorm = normals.get(Integer.parseInt(vertexData[2]) - 1);
     normalsArray[currentVertexPointer * 3] = currentNorm.x;
-    normalsArray[currentVertexPointer * 3] = currentNorm.y;
-    normalsArray[currentVertexPointer * 3] = currentNorm.z;
+    normalsArray[currentVertexPointer * 3 + 1] = currentNorm.y;
+    normalsArray[currentVertexPointer * 3 + 2] = currentNorm.z;
   }
 }

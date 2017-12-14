@@ -19,11 +19,11 @@ public class Renderer {
   private static final float NEAR_PLANE = 0.1f;
   private static final float FAR_PLANE = 1000;
   private Matrix4f projectionMatrix;
-  
+
   public void prepare() {
     GL11.glEnable(GL11.GL_DEPTH_TEST); // Test which triangles are in front of which and render in order
-    GL11.glClear(GL11.GL_COLOR_BUFFER_BIT|GL11.GL_DEPTH_BUFFER_BIT); // Clears buffer every frame
-    GL11.glClearColor(0, 0, 0, 1);
+    GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT); // Clears buffer every frame
+    GL11.glClearColor(66f / 255f, 7f / 255f, 11f / 255f, 1); //
   }
 
   public Renderer(StaticShader shader) {
@@ -32,7 +32,7 @@ public class Renderer {
     shader.loadProjectionMatrix(projectionMatrix);
     shader.stop();
   }
-  
+
   public void render(Entity entity, StaticShader shader) {
     TexturedModel model = entity.getModel();
     RawModel rawModel = model.getRawModel();
@@ -52,13 +52,13 @@ public class Renderer {
     GL20.glDisableVertexAttribArray(2);
     GL30.glBindVertexArray(0);
   }
-  
+
   private void createProjectionMatrix() {
     float aspectRatio = (float) Display.getWidth() / (float) Display.getHeight();
     float y_scale = (float) ((1f / Math.tan(Math.toRadians(FOV / 2f))) * aspectRatio);
     float x_scale = y_scale / aspectRatio;
     float frustum_length = FAR_PLANE - NEAR_PLANE;
-    
+
     projectionMatrix = new Matrix4f();
     projectionMatrix.m00 = x_scale;
     projectionMatrix.m11 = y_scale;
@@ -66,6 +66,6 @@ public class Renderer {
     projectionMatrix.m23 = -1;
     projectionMatrix.m32 = -((2 * NEAR_PLANE * FAR_PLANE) / frustum_length);
     projectionMatrix.m33 = 0;
-    
+
   }
 }
