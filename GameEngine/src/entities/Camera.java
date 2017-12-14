@@ -1,6 +1,7 @@
 package entities;
 
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.util.vector.Vector3f;
 
 // Represents our virtual camera.
@@ -15,20 +16,28 @@ public class Camera {
   }
 
   public void move() {
+    int dWheel = Mouse.getDWheel();
+    if (dWheel < 0) {
+      position.z += 5.25f;
+    } else if (dWheel > 0) {
+      position.z -= 5.25f;
+    }
+
     if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
-      position.z -= 0.05f;
-    }
-    if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
-      position.x -= +0.05f;
-    }
-    if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
-      position.x -= -0.05f;
+      position.y -= -1.25f;
     }
     if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
-      position.z -= -0.05f;
+      position.y -= +1.25f;
     }
+    if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
+      position.x -= +1.25f;
+    }
+    if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
+      position.x -= -1.25f;
+    }
+
   }
-  
+
   public Vector3f getPosition() {
     return position;
   }
