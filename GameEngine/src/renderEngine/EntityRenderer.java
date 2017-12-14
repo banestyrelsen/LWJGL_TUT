@@ -17,27 +17,12 @@ import shaders.StaticShader;
 import textures.ModelTexture;
 import toolbox.Maths;
 
-public class Renderer {
+public class EntityRenderer {
 
-  private static final float FOV = 70;
-  private static final float NEAR_PLANE = 0.1f;
-  private static final float FAR_PLANE = 1000;
-
-  private Matrix4f projectionMatrix;
   private StaticShader shader;
 
-  public void prepare() {
-    GL11.glEnable(GL11.GL_DEPTH_TEST); // Test which triangles are in front of which and render in order
-    GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT); // Clears buffer every frame
-    GL11.glClearColor(66f / 255f, 7f / 255f, 11f / 255f, 1); //
-  }
-
-  public Renderer(StaticShader shader) {
+  public EntityRenderer(StaticShader shader, Matrix4f projectionMatrix) {
     this.shader = shader;
-    // Do not render triangles facing away
-    GL11.glEnable(GL11.GL_CULL_FACE);
-    GL11.glCullFace(GL11.GL_BACK);
-    createProjectionMatrix();
     shader.start();
     shader.loadProjectionMatrix(projectionMatrix);
     shader.stop();
@@ -83,19 +68,4 @@ public class Renderer {
     shader.loadTransformationMatrix(transformationMatrix);
   }
 
-  private void createProjectionMatrix() {
-    float aspectRatio = (float) Display.getWidth() / (float) Display.getHeight();
-    float y_scale = (float) ((1f / Math.tan(Math.toRadians(FOV / 2f))) * aspectRatio);
-    float x_scale = y_scale / aspectRatio;
-    float frustum_length = FAR_PLANE - NEAR_PLANE;
-
-    projectionMatrix = new Matrix4f();
-    projectionMatrix.m00 = x_scale;
-    projectionMatrix.m11 = y_scale;
-    projectionMatrix.m22 = -((FAR_PLANE + NEAR_PLANE) / frustum_length);
-    projectionMatrix.m23 = -1;
-    projectionMatrix.m32 = -((2 * NEAR_PLANE * FAR_PLANE) / frustum_length);
-    projectionMatrix.m33 = 0;
-
-  }
 }

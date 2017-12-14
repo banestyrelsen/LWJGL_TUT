@@ -1,6 +1,7 @@
 package renderEngine;
 
-import java.io.FileInputStream;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.FloatBuffer;
@@ -8,13 +9,15 @@ import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.imageio.ImageIO;
+
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.newdawn.slick.opengl.Texture;
-import org.newdawn.slick.opengl.TextureLoader;
+import org.newdawn.slick.util.BufferedImageUtil;
 
 import models.RawModel;
 
@@ -44,7 +47,9 @@ public class Loader {
   public int loadTexture(String fileName) {
     Texture texture = null;
     try {
-      texture = TextureLoader.getTexture("PNG", new FileInputStream("res/" + fileName + ".png"));
+      BufferedImage bufferedImage = ImageIO.read(new File("res/" + fileName + ".png"));
+      texture = BufferedImageUtil.getTexture("", bufferedImage);
+//      texture = TextureLoader.getTexture("PNG", new FileInputStream("res/" + fileName + ".png"));
     } catch (FileNotFoundException e) {
       e.printStackTrace();
     } catch (IOException e) {
