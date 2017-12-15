@@ -10,12 +10,12 @@ import org.lwjgl.util.vector.Vector3f;
 import entities.Camera;
 import entities.Entity;
 import entities.Light;
-import models.RawModel;
 import models.TexturedModel;
+import objConverter.ModelData;
+import objConverter.OBJFileLoader;
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
 import renderEngine.MasterRenderer;
-import renderEngine.OBJLoader;
 import terrains.Terrain;
 import textures.ModelTexture;
 
@@ -25,13 +25,28 @@ public class MainGameLoop {
     DisplayManager.createDisplay();
     Loader loader = new Loader();
 
-    RawModel rawDragonModel = OBJLoader.loadObjModel("dragon", loader);
-    TexturedModel dragon = new TexturedModel(rawDragonModel, new ModelTexture(loader.loadTexture("green")));
-    TexturedModel lowPolyTree = new TexturedModel(OBJLoader.loadObjModel("lowPolyTree", loader),
+    ModelData dragonModelData = OBJFileLoader.loadOBJ("dragon");
+    ModelData lowPolyTreeModelData = OBJFileLoader.loadOBJ("lowPolyTree");
+    ModelData fernModelData = OBJFileLoader.loadOBJ("fern");
+    ModelData grassModelData = OBJFileLoader.loadOBJ("grassModel");
+
+    // RawModel rawDragonModel = loader.loadToVAO(dragonModelData.getVertices(),
+    // dragonModelData.getTextureCoords(),
+    // dragonModelData.getNormals(), dragonModelData.getIndices());
+    // RawModel rawDragonModel = OBJLoader.loadObjModel("dragon", loader);
+
+    TexturedModel dragon = new TexturedModel(loader.loadToVAO(dragonModelData.getVertices(),
+        dragonModelData.getTextureCoords(), dragonModelData.getNormals(), dragonModelData.getIndices()),
+        new ModelTexture(loader.loadTexture("green")));
+    TexturedModel lowPolyTree = new TexturedModel(
+        loader.loadToVAO(lowPolyTreeModelData.getVertices(), lowPolyTreeModelData.getTextureCoords(),
+            lowPolyTreeModelData.getNormals(), lowPolyTreeModelData.getIndices()),
         new ModelTexture(loader.loadTexture("lowPolyTree")));
-    TexturedModel fern = new TexturedModel(OBJLoader.loadObjModel("fern", loader),
+    TexturedModel fern = new TexturedModel(loader.loadToVAO(fernModelData.getVertices(),
+        fernModelData.getTextureCoords(), fernModelData.getNormals(), fernModelData.getIndices()),
         new ModelTexture(loader.loadTexture("fern")));
-    TexturedModel grass = new TexturedModel(OBJLoader.loadObjModel("grassModel", loader),
+    TexturedModel grass = new TexturedModel(loader.loadToVAO(grassModelData.getVertices(),
+        grassModelData.getTextureCoords(), grassModelData.getNormals(), grassModelData.getIndices()),
         new ModelTexture(loader.loadTexture("grassTexture")));
     grass.getTexture()
         .setHasTransparency(true);
@@ -49,15 +64,15 @@ public class MainGameLoop {
     List<Entity> entities = new ArrayList<>();
     Random random = new Random();
     for (int i = 0; i < 5000; i++) {
-      entities
-          .add(new Entity(grass, new Vector3f(random.nextFloat() * 3200, 0, random.nextFloat() * 3200), 0, 0, 0, 3));
+      entities.add(new Entity(grass, new Vector3f(random.nextFloat() * 3200, 0, random.nextFloat() * 3200), 0, 0, 0,
+          .5f + random.nextFloat() * 3));
       entities.add(new Entity(fern, new Vector3f(random.nextFloat() * 3200, 0, random.nextFloat() * 3200), 0,
-          random.nextFloat() * 360, 0, 1.6f));
+          random.nextFloat() * 360, 0, .5f + random.nextFloat() * 2));
     }
 
     for (int i = 0; i < 500; i++) {
       entities.add(new Entity(lowPolyTree, new Vector3f(random.nextFloat() * 3200, 0, random.nextFloat() * 3200), 0,
-          random.nextFloat() * 360, 0, random.nextFloat() * 3));
+          random.nextFloat() * 360, 0, .5f + random.nextFloat() * 3));
     }
     entities.add(new Entity(dragon, new Vector3f(1600, 0, 2400), 0, 0, 0, 1));
 
