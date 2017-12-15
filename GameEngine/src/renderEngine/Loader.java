@@ -47,6 +47,7 @@ public class Loader {
   public int loadTexture(String fileName) {
     Texture texture = null;
     try {
+      System.out.println("Loading file \"res/" + fileName + "\"");
       BufferedImage bufferedImage = ImageIO.read(new File("res/" + fileName + ".png"));
       texture = BufferedImageUtil.getTexture("", bufferedImage);
 //      texture = TextureLoader.getTexture("PNG", new FileInputStream("res/" + fileName + ".png"));

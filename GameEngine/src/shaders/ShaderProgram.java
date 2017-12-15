@@ -65,6 +65,10 @@ public abstract class ShaderProgram {
     GL20.glUniform1f(location, value);
   }
 
+  protected void loadInt(int location, int value) {
+    GL20.glUniform1i(location, value);
+  }
+
   protected void loadVector(int location, Vector3f vector) {
     GL20.glUniform3f(location, vector.x, vector.y, vector.z);
   }
@@ -108,7 +112,7 @@ public abstract class ShaderProgram {
     GL20.glCompileShader(shaderID);
     if (GL20.glGetShader(shaderID, GL20.GL_COMPILE_STATUS) == GL11.GL_FALSE) {
       System.out.println(GL20.glGetShaderInfoLog(shaderID, 500));
-      System.err.println("ShaderProgram : Could not compile shader "+ file);
+      System.err.println("ShaderProgram : Could not compile shader " + file);
       System.exit(-1);
     }
     return shaderID;

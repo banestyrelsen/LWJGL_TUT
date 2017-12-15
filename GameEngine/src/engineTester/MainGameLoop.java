@@ -18,12 +18,25 @@ import renderEngine.Loader;
 import renderEngine.MasterRenderer;
 import terrains.Terrain;
 import textures.ModelTexture;
+import textures.TerrainTexture;
+import textures.TerrainTexturePack;
 
 public class MainGameLoop {
 
   public static void main(String[] args) {
     DisplayManager.createDisplay();
     Loader loader = new Loader();
+
+    /*********** TERRAIN TEXTURE STUFF *************/
+    TerrainTexture backgroundTexture = new TerrainTexture(loader.loadTexture("grassy2"));
+    TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("mud"));
+    TerrainTexture gTexture = new TerrainTexture(loader.loadTexture("grassFlowers"));
+    TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("path"));
+
+    TerrainTexturePack texturePack = new TerrainTexturePack(backgroundTexture, rTexture, gTexture, bTexture);
+    TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("blendMap"));
+
+    /**********************************************/
 
     ModelData dragonModelData = OBJFileLoader.loadOBJ("dragon");
     ModelData lowPolyTreeModelData = OBJFileLoader.loadOBJ("lowPolyTree");
@@ -81,7 +94,7 @@ public class MainGameLoop {
     List<Terrain> terrains = new ArrayList<>();
     for (int x = 0; x < 4; x++) {
       for (int y = 0; y < 4; y++) {
-        Terrain terrain = new Terrain(x, y, loader, new ModelTexture(loader.loadTexture("dirt")));
+        Terrain terrain = new Terrain(x, y, loader, texturePack, blendMap);
         terrains.add(terrain);
       }
     }
