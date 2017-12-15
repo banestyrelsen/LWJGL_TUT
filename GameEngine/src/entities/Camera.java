@@ -16,26 +16,6 @@ public class Camera {
   }
 
   public void move() {
-    int dWheel = Mouse.getDWheel();
-    if (dWheel < 0) {
-      position.z += 15.25f;
-    } else if (dWheel > 0) {
-      position.z -= 15.25f;
-    }
-
-    if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
-      position.y -= -1.25f;
-    }
-    if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
-      position.y -= +1.25f;
-    }
-    if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
-      position.x -= +1.25f;
-    }
-    if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
-      position.x -= -1.25f;
-    }
-
   }
 
   public Vector3f getPosition() {

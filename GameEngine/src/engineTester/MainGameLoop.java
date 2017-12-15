@@ -10,6 +10,7 @@ import org.lwjgl.util.vector.Vector3f;
 import entities.Camera;
 import entities.Entity;
 import entities.Light;
+import entities.Player;
 import models.TexturedModel;
 import objConverter.ModelData;
 import objConverter.OBJFileLoader;
@@ -37,6 +38,14 @@ public class MainGameLoop {
     TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("blendMap"));
 
     /**********************************************/
+
+    ModelData bunnyModelData = OBJFileLoader.loadOBJ("stanfordBunny");
+
+    TexturedModel stanfordBunny = new TexturedModel(loader.loadToVAO(bunnyModelData.getVertices(),
+        bunnyModelData.getTextureCoords(), bunnyModelData.getNormals(), bunnyModelData.getIndices()),
+        new ModelTexture(loader.loadTexture("white")));
+
+    Player player = new Player(stanfordBunny, new Vector3f(1600, 0, 2280), 0, 0, 0, 2);
 
     ModelData dragonModelData = OBJFileLoader.loadOBJ("dragon");
     ModelData lowPolyTreeModelData = OBJFileLoader.loadOBJ("lowPolyTree");
@@ -106,6 +115,8 @@ public class MainGameLoop {
     MasterRenderer renderer = new MasterRenderer();
     while (!Display.isCloseRequested()) {
       camera.move();
+      player.move();
+      renderer.processEntity(player);
       // game logic
       // render
       for (Terrain terrain : terrains) {
