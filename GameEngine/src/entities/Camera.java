@@ -18,9 +18,9 @@ public class Camera {
   public void move() {
     int dWheel = Mouse.getDWheel();
     if (dWheel < 0) {
-      position.z += 5.25f;
+      position.z += 15.25f;
     } else if (dWheel > 0) {
-      position.z -= 5.25f;
+      position.z -= 15.25f;
     }
 
     if (Keyboard.isKeyDown(Keyboard.KEY_W)) {

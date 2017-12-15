@@ -19,7 +19,7 @@ import terrains.Terrain;
 
 public class MasterRenderer {
 
-  private static final float FOV = 90;
+  private static final float FOV = 70;
   private static final float NEAR_PLANE = 0.1f;
   private static final float FAR_PLANE = 100000;
 
@@ -30,18 +30,26 @@ public class MasterRenderer {
 
   private TerrainRenderer terrainRenderer;
   private TerrainShader terrainShader = new TerrainShader();
-  
+
   private Map<TexturedModel, List<Entity>> entities = new HashMap<>();
   private List<Terrain> terrains = new ArrayList<>();
 
   public MasterRenderer() {
     // Cull back faces
-    GL11.glEnable(GL11.GL_CULL_FACE);
-    GL11.glCullFace(GL11.GL_BACK);
+    enableCulling();
 
     createProjectionMatrix();
     renderer = new EntityRenderer(shader, projectionMatrix);
-    terrainRenderer = new TerrainRenderer(terrainShader,projectionMatrix);
+    terrainRenderer = new TerrainRenderer(terrainShader, projectionMatrix);
+  }
+
+  public static void enableCulling() {
+    GL11.glEnable(GL11.GL_CULL_FACE);
+    GL11.glCullFace(GL11.GL_BACK);
+  }
+
+  public static void disableCulling() {
+    GL11.glDisable(GL11.GL_CULL_FACE);
   }
 
   public void render(Light sun, Camera camera) {
@@ -59,7 +67,7 @@ public class MasterRenderer {
     entities.clear();
     terrains.clear();
   }
-  
+
   public void processTerrain(Terrain terrain) {
     terrains.add(terrain);
   }
@@ -84,7 +92,7 @@ public class MasterRenderer {
   public void prepare() {
     GL11.glEnable(GL11.GL_DEPTH_TEST); // Test which triangles are in front of which and render in order
     GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT); // Clears buffer every frame
-    GL11.glClearColor(66f / 255f, 7f / 255f, 11f / 255f, 1); //
+    GL11.glClearColor(148f / 255f, 222f / 255f, 252f / 255f, 1); //
   }
 
   private void createProjectionMatrix() {

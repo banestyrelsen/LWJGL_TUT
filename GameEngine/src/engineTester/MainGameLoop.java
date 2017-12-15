@@ -27,31 +27,37 @@ public class MainGameLoop {
 
     RawModel model = OBJLoader.loadObjModel("dragon", loader);
     TexturedModel dragonModel = new TexturedModel(model, new ModelTexture(loader.loadTexture("green")));
+    TexturedModel grass = new TexturedModel(OBJLoader.loadObjModel("grassModel", loader),
+        new ModelTexture(loader.loadTexture("grassTexture")));
+    grass.getTexture().setHasTransparency(true);
+    grass.getTexture().setUseFakeLighting(true);
+    TexturedModel fern = new TexturedModel(OBJLoader.loadObjModel("fern", loader),
+        new ModelTexture(loader.loadTexture("fern")));
+    fern.getTexture().setHasTransparency(true);
+    fern.getTexture().setUseFakeLighting(true);
     ModelTexture texture = dragonModel.getTexture();
     texture.setShineDamper(10);
     texture.setReflectivity(1);
 
-    List<Entity> dragons = new ArrayList<>();
+    List<Entity> entities = new ArrayList<>();
     Random random = new Random();
-//    for (int i = 0; i < 200; i++) {
-//      float x = random.nextFloat() * 100 - 50;
-//      float y = random.nextFloat() * 100 - 50;
-//      float z = random.nextFloat() * -300;
+    for (int i = 0; i < 1500; i++) {
+      entities.add(new Entity(grass, new Vector3f(random.nextFloat() * 1600, 0, random.nextFloat() * 1600),
+          0, 0, 0, 1));
+      entities.add(new Entity(fern, new Vector3f(random.nextFloat() * 1600, 0, random.nextFloat() * 1600),
+          0, 0, 0, 0.6f));
+    }
 
-//      dragons.add(
-//          new Entity(dragonModel, new Vector3f(x, y, z), random.nextFloat() * 180f, random.nextFloat() * 180f, 0f, 1f));
-//    }
-
-  dragons.add(
-  new Entity(dragonModel, new Vector3f(500, 0, 500), 0, 0, 0, 5));
+    entities.add(new Entity(dragonModel, new Vector3f(800, 0, 800), 0, 0, 0, 1));
     
     Light light = new Light(new Vector3f(3000, 2000, 2000), new Vector3f(1, 1, 1));
-    Terrain terrain = new Terrain(0, 0, loader, new ModelTexture(loader.loadTexture("grass")));
-    Terrain terrain2 = new Terrain(1, 0, loader, new ModelTexture(loader.loadTexture("grass")));
-
+    Terrain terrain = new Terrain(0, 0, loader, new ModelTexture(loader.loadTexture("dirt")));
+    Terrain terrain2 = new Terrain(1, 0, loader, new ModelTexture(loader.loadTexture("dirt")));
+    Terrain terrain3 = new Terrain(0, 1, loader, new ModelTexture(loader.loadTexture("dirt")));
+    Terrain terrain4 = new Terrain(1, 1, loader, new ModelTexture(loader.loadTexture("dirt")));
     Camera camera = new Camera();
-    camera.setPosition(new Vector3f(500, 25, 520));
-    camera.setPitch(45);
+    camera.setPosition(new Vector3f(800, 25, 820));
+    camera.setPitch(0);
 
     MasterRenderer renderer = new MasterRenderer();
     while (!Display.isCloseRequested()) {
@@ -60,9 +66,11 @@ public class MainGameLoop {
       // render
       renderer.processTerrain(terrain);
       renderer.processTerrain(terrain2);
-      for (Entity dragon : dragons) {
-        dragon.increaseRotation(0, 1, 0);
-        renderer.processEntity(dragon);
+      renderer.processTerrain(terrain3);
+      renderer.processTerrain(terrain4);
+      for (Entity entity : entities) {
+//        entity.increaseRotation(0, 1, 0);
+        renderer.processEntity(entity);
       }
       renderer.render(light, camera);
       DisplayManager.updateDisplay();
