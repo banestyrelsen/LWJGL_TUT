@@ -25,21 +25,24 @@ public class MainGameLoop {
     DisplayManager.createDisplay();
     Loader loader = new Loader();
 
-    RawModel model = OBJLoader.loadObjModel("dragon", loader);
-    TexturedModel dragonModel = new TexturedModel(model, new ModelTexture(loader.loadTexture("green")));
+    RawModel rawDragonModel = OBJLoader.loadObjModel("dragon", loader);
+    TexturedModel dragon = new TexturedModel(rawDragonModel, new ModelTexture(loader.loadTexture("green")));
+    TexturedModel lowPolyTree = new TexturedModel(OBJLoader.loadObjModel("lowPolyTree", loader),
+        new ModelTexture(loader.loadTexture("lowPolyTree")));
+    TexturedModel fern = new TexturedModel(OBJLoader.loadObjModel("fern", loader),
+        new ModelTexture(loader.loadTexture("fern")));
     TexturedModel grass = new TexturedModel(OBJLoader.loadObjModel("grassModel", loader),
         new ModelTexture(loader.loadTexture("grassTexture")));
     grass.getTexture()
         .setHasTransparency(true);
     grass.getTexture()
         .setUseFakeLighting(true);
-    TexturedModel fern = new TexturedModel(OBJLoader.loadObjModel("fern", loader),
-        new ModelTexture(loader.loadTexture("fern")));
+
     fern.getTexture()
         .setHasTransparency(true);
     fern.getTexture()
         .setUseFakeLighting(true);
-    ModelTexture texture = dragonModel.getTexture();
+    ModelTexture texture = dragon.getTexture();
     texture.setShineDamper(10);
     texture.setReflectivity(1);
 
@@ -47,12 +50,16 @@ public class MainGameLoop {
     Random random = new Random();
     for (int i = 0; i < 5000; i++) {
       entities
-          .add(new Entity(grass, new Vector3f(random.nextFloat() * 3200, 0, random.nextFloat() * 3200), 0, 0, 0, 1));
-      entities
-          .add(new Entity(fern, new Vector3f(random.nextFloat() * 3200, 0, random.nextFloat() * 3200), 0, 0, 0, 0.6f));
+          .add(new Entity(grass, new Vector3f(random.nextFloat() * 3200, 0, random.nextFloat() * 3200), 0, 0, 0, 3));
+      entities.add(new Entity(fern, new Vector3f(random.nextFloat() * 3200, 0, random.nextFloat() * 3200), 0,
+          random.nextFloat() * 360, 0, 1.6f));
     }
 
-    entities.add(new Entity(dragonModel, new Vector3f(1600, 0, 2400), 0, 0, 0, 1));
+    for (int i = 0; i < 500; i++) {
+      entities.add(new Entity(lowPolyTree, new Vector3f(random.nextFloat() * 3200, 0, random.nextFloat() * 3200), 0,
+          random.nextFloat() * 360, 0, random.nextFloat() * 3));
+    }
+    entities.add(new Entity(dragon, new Vector3f(1600, 0, 2400), 0, 0, 0, 1));
 
     Light light = new Light(new Vector3f(3000, 2000, 2000), new Vector3f(1, 1, 1));
 
