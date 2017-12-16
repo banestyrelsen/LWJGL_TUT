@@ -7,6 +7,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.PixelFormat;
+import org.lwjgl.util.vector.Vector3f;
 
 public class DisplayManager {
 
@@ -32,8 +33,9 @@ public class DisplayManager {
     lastFrameTime = getCurrentTime();
   }
 
-  public static void setFpsInTitle(int fps) {
-    Display.setTitle("Clade test | " + fps + " FPS");
+  public static void setInfoInTitle(int fps, Vector3f playerPosition) {
+    Display.setTitle("Clade test | (" + (int)playerPosition.getX() + " , " + (int)playerPosition.getY() + " , "
+        + (int)playerPosition.getZ() + ") | " + fps + " FPS");
   }
 
   public static void updateDisplay() {
