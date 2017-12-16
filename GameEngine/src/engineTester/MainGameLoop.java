@@ -45,8 +45,8 @@ public class MainGameLoop {
         bunnyModelData.getTextureCoords(), bunnyModelData.getNormals(), bunnyModelData.getIndices()),
         new ModelTexture(loader.loadTexture("white")));
 
-    Player player = new Player(stanfordBunny, new Vector3f(1600, 0, 2280), 0, 0, 0, 2);
-
+    Player player = new Player(stanfordBunny, new Vector3f(1600, 0, 2280), 0, 0, 0, 1);
+    Camera camera = new Camera(player);
     ModelData dragonModelData = OBJFileLoader.loadOBJ("dragon");
     ModelData lowPolyTreeModelData = OBJFileLoader.loadOBJ("lowPolyTree");
     ModelData fernModelData = OBJFileLoader.loadOBJ("fern");
@@ -107,10 +107,6 @@ public class MainGameLoop {
         terrains.add(terrain);
       }
     }
-
-    Camera camera = new Camera();
-    camera.setPosition(new Vector3f(1600, 25, 2480));
-    camera.setPitch(0);
 
     MasterRenderer renderer = new MasterRenderer();
     while (!Display.isCloseRequested()) {

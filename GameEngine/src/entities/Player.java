@@ -9,9 +9,10 @@ import renderEngine.DisplayManager;
 public class Player extends Entity {
 
   private static final float RUN_SPEED = 20; // units per second
+  private static final float SHIFT_BOOST = 200; // units per second
   private static final float TURN_SPEED = 160; // degrees per second
   private static final float GRAVITY = -50;
-  private static final float JUMP_POWER = 30;
+  private static final float JUMP_POWER = 50;
 
   private static final float TERRAIN_HEIGHT = 0;
 
@@ -49,9 +50,17 @@ public class Player extends Entity {
 
   private void checkInputs() {
     if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
-      this.currentSpeed = RUN_SPEED;
+      if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+        this.currentSpeed = RUN_SPEED + SHIFT_BOOST;
+      } else {
+        this.currentSpeed = RUN_SPEED;
+      }
     } else if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
-      this.currentSpeed = -RUN_SPEED;
+      if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+        this.currentSpeed = -RUN_SPEED - SHIFT_BOOST;
+      } else {
+        this.currentSpeed = -RUN_SPEED;
+      }
     } else {
       this.currentSpeed = 0;
     }
