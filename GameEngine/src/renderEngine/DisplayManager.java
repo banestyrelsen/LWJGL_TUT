@@ -12,7 +12,7 @@ public class DisplayManager {
 
   private static final int WIDTH = 1600;
   private static final int HEIGHT = 1200;
-  private static final int FPS_CAP = 120;
+  private static final int FPS_CAP = 2000;
   private static long lastFrameTime;
   private static float delta;
 
@@ -30,6 +30,10 @@ public class DisplayManager {
 
     GL11.glViewport(0, 0, WIDTH, HEIGHT);
     lastFrameTime = getCurrentTime();
+  }
+
+  public static void setFpsInTitle(int fps) {
+    Display.setTitle("Clade test | " + fps + " FPS");
   }
 
   public static void updateDisplay() {

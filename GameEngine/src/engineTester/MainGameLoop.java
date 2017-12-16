@@ -24,6 +24,11 @@ import textures.TerrainTexturePack;
 
 public class MainGameLoop {
 
+  /**** FPS COUNTER ****/
+  private static int frames = 0;
+  private static int updates = 0;
+  private static long timer = System.currentTimeMillis();
+
   public static void main(String[] args) {
     DisplayManager.createDisplay();
     Loader loader = new Loader();
@@ -71,9 +76,8 @@ public class MainGameLoop {
     TexturedModel grass = new TexturedModel(loader.loadToVAO(grassModelData.getVertices(),
         grassModelData.getTextureCoords(), grassModelData.getNormals(), grassModelData.getIndices()),
         new ModelTexture(loader.loadTexture("grassTexture")));
-    TexturedModel box = new TexturedModel(loader.loadToVAO(boxModelData.getVertices(),
-        boxModelData.getTextureCoords(), boxModelData.getNormals(), boxModelData.getIndices()),
-        new ModelTexture(loader.loadTexture("box")));
+    TexturedModel box = new TexturedModel(loader.loadToVAO(boxModelData.getVertices(), boxModelData.getTextureCoords(),
+        boxModelData.getNormals(), boxModelData.getIndices()), new ModelTexture(loader.loadTexture("box")));
     grass.getTexture()
         .setHasTransparency(true);
     grass.getTexture()
@@ -100,6 +104,8 @@ public class MainGameLoop {
     for (int i = 0; i < 500; i++) {
       entities.add(new Entity(lowPolyTree, new Vector3f(random.nextFloat() * 3200, 0, random.nextFloat() * 3200), 0,
           random.nextFloat() * 360, 0, .5f + random.nextFloat() * 3));
+    }
+    for (int i = 0; i < 100; i++) {
       entities.add(new Entity(box, new Vector3f(random.nextFloat() * 3200, 15, random.nextFloat() * 3200), 0,
           random.nextFloat() * 360, 0, 14));
     }
@@ -110,12 +116,13 @@ public class MainGameLoop {
     List<Terrain> terrains = new ArrayList<>();
     for (int x = 0; x < 4; x++) {
       for (int y = 0; y < 4; y++) {
-        Terrain terrain = new Terrain(x, y, loader, texturePack, blendMap);
+        Terrain terrain = new Terrain(x, y, loader, texturePack, blendMap, "heightmap");
         terrains.add(terrain);
       }
     }
 
     MasterRenderer renderer = new MasterRenderer();
+
     while (!Display.isCloseRequested()) {
       camera.move();
       player.move();
@@ -131,11 +138,22 @@ public class MainGameLoop {
       }
       renderer.render(light, camera);
       DisplayManager.updateDisplay();
+      getFps();
     }
-
     renderer.cleanUp();
     loader.cleanUp();
     DisplayManager.closeDisplay();
+  }
+
+  private static void getFps() {
+    updates++;
+    frames++;
+    if (System.currentTimeMillis() - timer > 1000) {
+      timer += 1000;
+      DisplayManager.setFpsInTitle(frames);
+      updates = 0;
+      frames = 0;
+    }
   }
 
 }
